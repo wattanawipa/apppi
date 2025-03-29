@@ -1,58 +1,62 @@
-import React from "react";
+import React, { useState } from "react";
 
+function Karaoke() {
+  const [hours, setHours] = useState(""); 
+  const [studentCard, setStudentCard] = useState(null); 
+  const [total, setTotal] = useState(""); 
 
-export default function Karaokae(){
-    const textPswd = React.useRef()
-    const textPswd2 = React.useRef()
-
-    const onBlurPassword =() => {
-        let pswd = textPswd.current.value
-        if(pswd !== '' && !pswd.match()){
-            textPswd.current.value =''
-            alert('กรุณากรอกจำนวนชั่วโมง')  
-        }
+  const calculateCost = () => {
+    if (!hours || parseInt(hours) <= 0) {
+      alert("กรุณากรอกจำนวนชั่วโมง");
+      return;
     }
-    const onBlurPassword2 = () =>{
-        if(textPswd.current.value !== textPswd2.current.value){
-            textPswd2.current.value =''
-            alert('กรุณากรอกจำนวนชั่วโมง')
-        }
-    }
-    return(
-        <div className="mt-4 mx-auto p-3 roundeb" 
-        style={{ width:'400px',background:'#cee'}}>
-            <form>
-                <div className="form-group mb-2">
-                    <label htmlFor="login">ชื่อผู้ใช้(Login)</label>
-                    <input type="text" id="login" name="login" maxLength="20" 
-                    className="form-control form-control-sm"/>
-                </div>
-                <div className="form-group mb-2">
-                    <label htmlFor="pswd">รหัสผ่าน</label>
-                    <input type="Password" id="pswd" name="pswd" maxLength="10" 
-                    className="form-control form-control-sm"
-                    ref={textPswd} onBlur={onBlurPassword}/>
-                </div>
-                <div className="form-group mb-2">
-                    <label htmlFor="pswd2">ใส่รหัสผ่านซ้ำอีกครั้ง</label>
-                    <input type="Password" id="pswd2"
-                    className="form-control form-control-sm"
-                    ref={textPswd2} onBlur={onBlurPassword2}/>
-                </div>
-                <div className="form-group mb-4">
-                    <label htmlFor="memo">บันทึกช่วยจำ</label>
-                    <textarea id="memo" name="memo" rows="2"
-                    maxLength="200"
-                    className="form-control form-control-sm">
-                    </textarea>
-                    </div>
-                    <div className="text-center">
-                        <button className="btn btn-sm px-4 btn-primary">
-                            OK
-                        </button>
-                </div>
-            </form>
-        </div> 
-)
-        
+    let rate = studentCard ? 80 : 120;
+    setTotal(hours * rate + " บาท");
+  };
+
+  return (
+    <div style={{ marginTop: "10px", marginLeft: "10px" }}>
+      <table border="1" style={{ marginTop: "10px", marginLeft: "10px" }}>
+        <tbody>
+          <tr>
+            <td colSpan="2" style={{ textAlign: "center", fontWeight: "bold" }}>
+              ร้านคาราโอเกะ
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input
+                type="radio"
+                name="karaokeType"
+                onChange={() => setStudentCard(false)}
+              />{" "}
+              ไม่มีบัตรนักศึกษา (ชั่วโมงละ 120 บาท)
+              <br />
+              <input
+                type="radio"
+                name="karaokeType"
+                onChange={() => setStudentCard(true)}
+              />{" "}
+              มีบัตรนักศึกษา (ชั่วโมงละ 80 บาท)
+              <br />
+              <br />
+              จำนวนชั่วโมง:{" "}
+              <input
+                type="number"
+                value={hours}
+                onChange={(e) => setHours(e.target.value)}
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <br />
+      <button onClick={calculateCost}>คิดเงิน</button>
+      <br />
+      รวมเป็นเงินทั้งสิ้น ={" "}
+      <input type="text" value={total} readOnly /> บาท
+    </div>
+  );
 }
+
+export default Karaoke;
